@@ -1,6 +1,8 @@
 # Robot-to-robot leader–follower coordination
 
-Video upload pending. See [upload instructions](../../docs/VIDEO_UPLOAD.md).
+[Open or download the experiment video (MP4)](https://github.com/Nargesgoli/5G-NetBotSim/raw/refs/heads/main/experiments/robot_to_robot/robot_robot.mp4).
+
+If GitHub cannot preview the file, use this direct link to open or download it. Playback depends on your browser; downloaded files can be opened in a local media player.
 
 **Paper: Sections IV-C2 and V-B2; Figures 3b and 8.**
 

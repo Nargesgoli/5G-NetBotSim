@@ -18,7 +18,7 @@ Code and documentation accompanying the paper by **Narges Golmohammadi, Bhaskara
 | **EdgeSim** | RAN-side edge intelligence, scheduling, and the edge-assisted partial MAC-layer bypass for D2D communication | [EdgeSim/](EdgeSim/): component guide, upstream integration map, and bypass scope |
 | **BotSim** | ROS Noetic/Gazebo robot execution, control, visualization, and per-robot ROS namespaces | [BotSim/](BotSim/): robot applications and custom simulation packages |
 
-Large third-party simulator trees, generated builds, recordings, and final experiment datasets are external to this compact source release. The paper describes the full framework; availability of each component's implementation is stated in its guide. See [release status](docs/RELEASE_STATUS.md) for the assembled release's validation and radio-mode details.
+Large third-party simulator trees, generated builds and final experiment datasets are external to this compact source release. The paper describes the full framework; availability of each component's implementation is stated in its guide. See [release status](docs/RELEASE_STATUS.md) for the assembled release's validation and radio-mode details.
 
 ## Experiments
 
@@ -39,7 +39,12 @@ The paper's robot-to-robot workload uses **two quadrotors**, `robot_alpha` and `
 
 ## Experiment videos
 
-Experiment recordings will be uploaded separately by the authors. See [video upload instructions](docs/VIDEO_UPLOAD.md).
+| Experiment | Recording |
+|---|---|
+| Human-to-robot: robotic-arm teleoperation | [Open or download video (MP4, 14.6 MB)](https://github.com/Nargesgoli/5G-NetBotSim/raw/refs/heads/main/experiments/human_to_robot/Humon_robot.mp4) |
+| Robot-to-robot: quadrotor coordination | [Open or download video (MP4, 25.0 MB)](https://github.com/Nargesgoli/5G-NetBotSim/raw/refs/heads/main/experiments/robot_to_robot/robot_robot.mp4) |
+
+GitHub's file page may report that these files are too large to preview. The links above open the raw recordings; depending on your browser, they may play directly or download. If a video downloads, open it in a local media player. See [video access and maintenance](docs/VIDEO_UPLOAD.md).
 
 ## Getting started
 
@@ -82,7 +87,7 @@ Eight integration checks cover packet/port agreement, stale-state rejection, nam
 
 **5G-NetBotSim: A Synchronized Intelligent Co-Simulation Framework for Connected Robots over ROS and srsRAN-based 5G Network.**
 
-Final proceedings metadata, DOI, and paper/video links will be added after verification. `CITATION.cff` identifies this software repository. [Paper-to-code map](docs/PAPER_TO_CODE.md) lists the corresponding components, workloads, and release coverage.
+Final proceedings metadata, DOI, and paper links will be added after verification. `CITATION.cff` identifies this software repository. [Paper-to-code map](docs/PAPER_TO_CODE.md) lists the corresponding components, workloads, and release coverage.
 
 ## Attribution and licensing
 
