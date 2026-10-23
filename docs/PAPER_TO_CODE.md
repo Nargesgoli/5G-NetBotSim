@@ -6,11 +6,10 @@ This map follows the supplied accepted manuscript, **5G-NetBotSim: A Synchronize
 |---|---|---|
 | Section III-A: 5G-NetSim | `5G-NetSim/`, `scripts/run-network` | Radio broker, source integration, launch guide; external baseline radio mode documented |
 | Section III-B: BotSim | `BotSim/` | ROS applications, custom ground/quadrotor packages; complete arm simulation external |
-| Section III-C: EdgeSim | `EdgeSim/` | RAN-side integration and partial bypass scope; validated bypass patch not bundled |
+| Section III-C: EdgeSim | `EdgeSim/` | RAN-side controller, messaging, and scheduling integration guide |
 | Section III-D: timing | `experiments/human_to_robot/timing/`, `docs/MEASUREMENTS.md` | Packet stages L1–L3 available; complete L4–L5 arm event logging pending |
 | IV-C1, V-B1, Figs. 3a/6/7: human-to-robot | `experiments/human_to_robot/`, `BotSim/human_to_robot/` | Position timing code; position/velocity protocols; full MoveIt workflows pending |
 | IV-C2, V-B2, Figs. 3b/8: robot-to-robot | `experiments/robot_to_robot/`, `BotSim/robot_to_robot/` | Quadrotor state/control/transport and received-reference plot |
-| V-C, Fig. 9: D2D MAC bypass | `EdgeSim/`, robot-to-robot experiment guide | Comparison described; normal/bypass reproduction assets pending |
 
 The architecture figure uses generic robot/UE namespace labels. The actual example ROS topics use `robot_alpha`/`robot_beta`, separately mapped to Linux UE namespaces `ue1`/`ue2`.
 

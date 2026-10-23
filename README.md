@@ -15,7 +15,7 @@ Code and documentation accompanying the paper by **Narges Golmohammadi, Bhaskara
 | Component | Role in the paper | Repository |
 |---|---|---|
 | **5G-NetSim** | Executable srsRAN communication path, virtual radio, core and UE processes, and per-UE network isolation | [5G-NetSim/](5G-NetSim/): radio broker, network setup, and external-source integration |
-| **EdgeSim** | RAN-side edge intelligence, scheduling, and the edge-assisted partial MAC-layer bypass for D2D communication | [EdgeSim/](EdgeSim/): component guide, upstream integration map, and bypass scope |
+| **EdgeSim** | RAN-side edge intelligence, scheduling, and messaging support | [EdgeSim/](EdgeSim/): component guide and upstream integration map |
 | **BotSim** | ROS Noetic/Gazebo robot execution, control, visualization, and per-robot ROS namespaces | [BotSim/](BotSim/): robot applications and custom simulation packages |
 
 Large third-party simulator trees, generated builds and final experiment datasets are external to this compact source release. The paper describes the full framework; availability of each component's implementation is stated in its guide. See [release status](docs/RELEASE_STATUS.md) for the assembled release's validation and radio-mode details.
@@ -35,7 +35,7 @@ The paper's human-to-robot workload controls a **multi-joint robotic arm** throu
 
 The paper's robot-to-robot workload uses **two quadrotors**, `robot_alpha` and `robot_beta`. The leader takes off to 2 m and follows nine waypoints. Its position/yaw are transmitted at 10 Hz from UE1 to UE2; the follower uses bounded proportional control to maintain a 2 m world-X offset from the received leader state.
 
-[Robot-to-robot experiments](experiments/robot_to_robot/) connect the supplied drone controllers, cellular bridges, launch package, and tracking plot. The normal communication path and the paper's EdgeSim-assisted bypass comparison are documented separately; a validated bypass implementation is not bundled here.
+[Robot-to-robot experiments](experiments/robot_to_robot/) connect the supplied drone controllers, cellular bridges, launch package, and tracking plot.
 
 ## Experiment videos
 
@@ -61,7 +61,7 @@ The guides distinguish commands available in this source subset from missing exp
 | Path | Purpose |
 |---|---|
 | `5G-NetSim/` | Virtual-radio broker and network component guide |
-| `EdgeSim/` | Edge intelligence and partial MAC-bypass integration guide |
+| `EdgeSim/` | RAN-side edge intelligence and scheduling integration guide |
 | `BotSim/human_to_robot/` | Robotic-arm application integration and availability map |
 | `BotSim/robot_to_robot/` | Quadrotor telemetry, UE adapters, and follower control |
 | `BotSim/workspaces/` | Custom ROS/Gazebo packages; third-party simulator dependencies external |

@@ -49,4 +49,4 @@ After a populated follower CSV exists:
 
 This plots offset error to the **received**, possibly delayed leader state. It is not automatically synchronized true-leader tracking error. Header-only logs are rejected. Final datasets and historical figures are not bundled. See [measurement definitions](MEASUREMENTS.md).
 
-Application sources are in [BotSim/robot_to_robot](../BotSim/robot_to_robot/). See [experiment overview](../experiments/robot_to_robot/) for the paper protocol and [EdgeSim](../EdgeSim/) for the separate bypass comparison.
+Application sources are in [BotSim/robot_to_robot](../BotSim/robot_to_robot/). See [experiment overview](../experiments/robot_to_robot/) for the paper protocol.
