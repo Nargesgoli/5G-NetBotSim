@@ -86,7 +86,7 @@ Five integration checks cover stale-state rejection, namespace failure handling,
 
 **5G-NetBotSim: A Synchronized Intelligent Co-Simulation Framework for Connected Robots over ROS and srsRAN-based 5G Network.**
 
-Final proceedings metadata, DOI, and paper links will be added after verification. `CITATION.cff` identifies this software repository. [Paper-to-code map](docs/PAPER_TO_CODE.md) lists the corresponding components, workloads, and release coverage.
+Final proceedings metadata, DOI, and paper links will be added after paper presentation. `CITATION.cff` identifies this software repository. [Paper-to-code map](docs/PAPER_TO_CODE.md) lists the corresponding components, workloads, and release coverage.
 
 ## Attribution and licensing
 
