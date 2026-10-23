@@ -10,7 +10,7 @@ Code and documentation accompanying the paper by **Narges Golmohammadi, Bhaskara
 
 ![5G-NetBotSim architecture from the paper](docs/assets/5g-netbotsim.jpg)
 
-*Architecture figure supplied by the authors and used in the paper. The original image is included without modification.*
+*5G-NetBotSim architecture: End-to-end command delivery and telemetry feedback framework connecting the host task planner to ROS-enabled simulated multi-robots through srsRAN-based open-source 5G network augmented with edge intelligence.*
 
 | Component | Role in the paper | Repository |
 |---|---|---|
