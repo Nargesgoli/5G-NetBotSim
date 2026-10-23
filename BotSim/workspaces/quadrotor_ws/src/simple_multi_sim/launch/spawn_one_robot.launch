@@ -1,0 +1,16 @@
+<launch>
+  <arg name="robot_name" default="ue1"/>
+  <arg name="x_pos" default="0.0"/>
+  <arg name="y_pos" default="0.0"/>
+  <arg name="z_pos" default="0.3"/>
+
+  <group ns="$(arg robot_name)">
+    <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+      <arg name="name" value="$(arg robot_name)"/>
+      <arg name="tf_prefix" value="$(arg robot_name)"/>
+      <arg name="x" value="$(arg x_pos)"/>
+      <arg name="y" value="$(arg y_pos)"/>
+      <arg name="z" value="$(arg z_pos)"/>
+    </include>
+  </group>
+</launch>

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+stack_root="$project_root/vendor/network-stack"
+role="${1:---help}"
+case "$role" in
+ --help|help)
+  printf '%s\n' 'Usage: scripts/run-network {broker|epc|enb|ue1|ue2}' \
+    'Run each role in its own container terminal after building.' \
+    'These foreground commands do not create namespaces or configure CQI.'
+  exit 0 ;;
+ broker)
+  exec python3 "$project_root/5G-NetSim/radio_broker.py" ;;
+ epc)
+  binary="$stack_root/srsran-enb/build/srsepc/src/srsepc"
+  config="$stack_root/.config/epc.conf"
+  cd "$stack_root/srsran-enb/build" ;;
+ enb)
+  binary="$stack_root/srsran-enb/build/srsenb/src/srsenb"
+  config="$stack_root/.config/enb.conf"
+  cd "$stack_root/srsran-enb/build" ;;
+ ue1|ue2)
+  if [[ "$role" == ue1 ]]; then
+    binary="$stack_root/srsran-ue/build/srsue/src/srsue"
+    config="$stack_root/.config/ue1.conf"
+    device_args='tx_port=tcp://*:2001,rx_port=tcp://localhost:2000,id=ue,base_srate=23.04e6'
+    params="${NETBOTSIM_UE1_PARAMS:-../params1.txt}"
+  else
+    binary="$stack_root/srsran-ue/build/srsue/src/srsue2"
+    config="$stack_root/.config/ue2.conf"
+    device_args='tx_port=tcp://*:2011,rx_port=tcp://localhost:2010,id=ue,base_srate=23.04e6'
+    params="${NETBOTSIM_UE2_PARAMS:-../params2.txt}"
+  fi
+  cd "$stack_root/srsran-ue/build"
+  [[ -x "$binary" ]] || { printf 'Missing built executable: %s\n' "$binary" >&2; exit 1; }
+  [[ -f "$params" ]] || { printf 'Missing UE parameter file: %s\n' "$params" >&2; exit 1; }
+  exec "$binary" "$config" --rf.device_name=zmq --rf.device_args="$device_args" \
+    --gw.netns="$role" --params_filename="$params"
+  ;;
+ *) printf 'Unknown network role: %s\n' "$role" >&2; exit 2 ;;
+esac
+[[ -x "$binary" ]] || { printf 'Missing built executable: %s\n' "$binary" >&2; exit 1; }
+[[ -f "$config" ]] || { printf 'Missing network config: %s\n' "$config" >&2; exit 1; }
+exec "$binary" "$config"

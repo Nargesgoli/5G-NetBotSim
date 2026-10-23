@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+vendor/network-stack/
+**/build/
+**/devel/
+**/install/
+**/logs/
+results/
+*.bag
+*.mp4
+*.avi
+*.tar.gz
+*.zip
+.DS_Store

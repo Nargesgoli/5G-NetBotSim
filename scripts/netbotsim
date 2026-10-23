@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+set -euo pipefail
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+stack_root="$project_root/vendor/network-stack"
+command_name="${1:-help}"
+case "$command_name" in
+  help|-h|--help)
+    printf '%s\n' 'Usage: scripts/netbotsim {help|doctor|shell|exec|build|network|ros|run}' \
+      'doctor: inspect host tools and source files' \
+      'shell: open the upstream container environment' \
+      'build: compile network sources in the configured environment' \
+      'exec: enter a running project container' \
+      'network: launch broker, EPC, base station, or one UE' \
+      'ros: build or launch a host robot workspace' \
+      'run: launch one application role (see scripts/run-app --help)'
+    ;;
+  doctor)
+    missing=0
+    for tool in docker python3 cmake make; do
+      if command -v "$tool" >/dev/null 2>&1; then
+        printf 'Found: %s\n' "$tool"
+      else
+        printf 'Missing: %s\n' "$tool"
+        missing=1
+      fi
+    done
+    for path in srsran-enb/CMakeLists.txt srsran-ue/CMakeLists.txt .config/enb.conf edgeric/edgeric_messenger.py; do
+      if [[ -f "$stack_root/$path" ]]; then
+        printf 'Source present: %s\n' "$path"
+      else
+        printf 'Source missing: %s\n' "$path"
+        missing=1
+      fi
+    done
+    printf '%s\n' 'Application code is included. UE-to-UE connectivity and full-system validation remain pending.'
+    exit "$missing"
+    ;;
+  shell)
+    [[ -d "$stack_root" ]] || { printf 'Fetch source first: ./scripts/fetch-network-source\n' >&2; exit 1; }
+    exec docker run --rm -it --name netbotsim_0 --network host --privileged \
+      --mount "type=bind,src=$stack_root,dst=/home/EdgeRIC-A-real-time-RIC" \
+      --mount "type=bind,src=$project_root,dst=/workspace/5G-NetBotSim" \
+      --workdir /home/EdgeRIC-A-real-time-RIC \
+      "${NETBOTSIM_IMAGE:-nlpurnhyun/edgeric_base_oaic}" bash
+    ;;
+  exec)
+    exec docker exec -it --workdir /workspace/5G-NetBotSim "${NETBOTSIM_CONTAINER:-netbotsim_0}" bash
+    ;;
+  ros)
+    shift
+    exec "$project_root/scripts/ros-workspace" "$@"
+    ;;
+  network)
+    shift
+    exec "$project_root/scripts/run-network" "$@"
+    ;;
+  run)
+    shift
+    exec "$project_root/scripts/run-app" "$@"
+    ;;
+  build)
+    [[ -d "$stack_root" ]] || { printf 'Fetch source first: ./scripts/fetch-network-source\n' >&2; exit 1; }
+    for component in srsran-enb srsran-ue; do
+      cmake -S "$stack_root/$component" -B "$stack_root/$component/build"
+      cmake --build "$stack_root/$component/build" --parallel "${NETBOTSIM_JOBS:-4}"
+    done
+    ;;
+  *)
+    printf 'Unknown command: %s\n' "$command_name" >&2
+    exit 2
+    ;;
+esac

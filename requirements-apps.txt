@@ -1,0 +1,7 @@
+pyzmq
+numpy
+pandas
+matplotlib
+scipy
+# ROS Noetic, geometry_msgs and nav_msgs come from the ROS environment.
+# Legacy video scripts additionally require OpenCV.

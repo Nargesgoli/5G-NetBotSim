@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Please cite the 5G-NetBotSim paper. This file identifies the initial software repository; final proceedings metadata will be added after verification."
+type: software
+title: "5G-NetBotSim"
+authors:
+  - family-names: Golmohammadi
+    given-names: Narges
+  - family-names: Garuda
+    given-names: Bhaskara Venkata Raju
+  - family-names: Joshi
+    given-names: Ayan
+  - family-names: Baidya
+    given-names: Sabur
+keywords:
+  - connected robots
+  - co-simulation
+  - ROS
+  - software-defined radio

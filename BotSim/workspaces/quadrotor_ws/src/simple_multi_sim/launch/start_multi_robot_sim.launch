@@ -1,0 +1,22 @@
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+  </include>
+
+  <!-- Leader at origin -->
+  <include file="$(find simple_multi_sim)/launch/spawn_one_robot.launch">
+    <arg name="robot_name" value="robot_alpha"/>
+    <arg name="x_pos" value="0.0"/>
+    <arg name="y_pos" value="0.0"/>
+    <arg name="z_pos" value="0.3"/>
+  </include>
+
+  <!-- Follower starts 2m behind leader -->
+  <include file="$(find simple_multi_sim)/launch/spawn_one_robot.launch">
+    <arg name="robot_name" value="robot_beta"/>
+    <arg name="x_pos" value="-2.0"/>
+    <arg name="y_pos" value="0.0"/>
+    <arg name="z_pos" value="0.3"/>
+  </include>
+</launch>

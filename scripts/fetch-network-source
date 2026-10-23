@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+target="$project_root/vendor/network-stack"
+if [[ -e "$target" ]]; then
+  printf 'Already exists: %s\nInspect/reuse existing source rather than overwriting it.\n' "$target" >&2
+  exit 1
+fi
+command -v git >/dev/null || { printf 'Git is required.\n' >&2; exit 1; }
+mkdir -p "$project_root/vendor"
+git clone https://github.com/ucsdwcsng/EdgeRIC-A-real-time-RIC.git "$target"
+git -C "$target" checkout --detach 334c0ed9519d0d565007ec13f33a711cdf9a9fc3
+printf 'Source fetched. See docs/INSTALLATION.md.\n'
