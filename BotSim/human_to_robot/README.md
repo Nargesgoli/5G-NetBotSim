@@ -4,4 +4,4 @@ The paper's human-to-robot experiment controls a multi-joint robotic arm using M
 
 The available command and packet timing code is under [experiments/human_to_robot/timing](../../experiments/human_to_robot/timing/). Full host-side MoveIt dispatch, execution-start/completion instrumentation, cancellation/replanning nodes, and manipulator simulation assets are not included in this compact release.
 
-See [human-to-robot workflow](../../docs/HUMAN_TO_ROBOT.md). The supplementary ground robot `ros-bridge` is a Twist bridge and is not a replacement for the arm's MoveIt execution node.
+See [human-to-robot workflow](../../docs/HUMAN_TO_ROBOT.md).

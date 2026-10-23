@@ -43,14 +43,13 @@ Compilation was confirmed on the authors' host during integration. Continue with
 
 ## ROS source subset
 
-Only `multi_robot_sim` and `simple_multi_sim` are bundled in their separate ground/quadrotor workspaces. Hector and other third-party ROS source trees, compiled workspaces, and manipulator/MoveIt assets are not bundled.
+Only `simple_multi_sim` is bundled in the quadrotor workspace. Hector and other third-party ROS source trees, compiled workspaces, and manipulator/MoveIt assets are not bundled.
 
 The quadrotor launch requires `hector_quadrotor_gazebo`. Use the authors' established Hector installation, or obtain [the referenced Hector Noetic source](https://github.com/RAFALAMAO/hector_quadrotor_noetic) and resolve its dependencies separately. The final working dependency revision and complete installation recipe are not yet pinned. Use an underlay or place required dependencies in the appropriate `src` directory; avoid conflicting package copies in a catkin workspace.
 
 After ROS and simulator dependencies are available:
 
 ```bash
-./scripts/netbotsim ros build-ground
 ./scripts/netbotsim ros build-quadrotor
 ```
 

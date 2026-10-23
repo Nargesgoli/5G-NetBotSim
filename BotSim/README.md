@@ -11,4 +11,4 @@ BotSim is the ROS Noetic/Gazebo 11 robotic application layer. Host-side ROS proc
 
 The architecture image uses illustrative `/ue1` and `/ue2` robot labels. The supplied quadrotor code uses `/robot_alpha` and `/robot_beta` ROS namespaces, mapped to Linux network namespaces `ue1` and `ue2` respectively; these names are separate scopes.
 
-`workspaces/` contains custom source packages, not prebuilt full simulations. Third-party Hector packages are external. `examples/` contains supplementary ground-robot examples, separate from the paper's two main workloads. See [installation](../docs/INSTALLATION.md).
+`workspaces/` contains custom source packages, not prebuilt full simulations. Third-party Hector packages are external. See [installation](../docs/INSTALLATION.md).

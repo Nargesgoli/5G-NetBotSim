@@ -20,4 +20,4 @@ The timing receiver logs packet arrival. It does not command the robot or measur
 
 The complete position workflow requires the arm model, MoveIt configuration, the host execution node, and sequence-aligned execution-start/completion logs. The velocity workflow additionally requires the correct label/velocity payload, active-trajectory cancellation, replanning from the interrupted state, and reference trajectories for each command interval. These assets are pending in this compact source release.
 
-Do not substitute the ground-robot Twist bridge for the arm's MoveIt node. Ground examples are documented under [supplementary examples](SUPPLEMENTARY_EXAMPLES.md). See [measurement definitions](MEASUREMENTS.md) for the paper's latency stages.
+See [measurement definitions](MEASUREMENTS.md) for the paper's latency stages.

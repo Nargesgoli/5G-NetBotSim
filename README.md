@@ -29,7 +29,7 @@ The paper's human-to-robot workload controls a **multi-joint robotic arm** throu
 - **Position/waypoint commands:** six predefined targets, with command delivery, ROS dispatch, queueing, and task-response timing.
 - **Velocity-parameterized commands:** motion labels and requested velocities, with interruption/replanning at command intervals of 0.5, 1.0, and 1.5 s.
 
-[Human-to-robot experiments](experiments/human_to_robot/) include the supplied command/timing path and separate guides for the two modes. Full MoveIt execution nodes and velocity-mode experiment scripts are not yet included in this compact release. Ground mobile-robot teleoperation is kept as a supplementary example, rather than presented as the paper's arm experiment.
+[Human-to-robot experiments](experiments/human_to_robot/) include the supplied command/timing path and separate guides for the two modes. Full MoveIt execution nodes and velocity-mode experiment scripts are not yet included in this compact release.
 
 ### 2. Robot-to-robot leader–follower coordination
 
@@ -65,7 +65,6 @@ The guides distinguish commands available in this source subset from missing exp
 | `BotSim/human_to_robot/` | Robotic-arm application integration and availability map |
 | `BotSim/robot_to_robot/` | Quadrotor telemetry, UE adapters, and follower control |
 | `BotSim/workspaces/` | Custom ROS/Gazebo packages; third-party simulator dependencies external |
-| `BotSim/examples/` | Supplementary ground teleoperation and velocity-replay examples |
 | `experiments/human_to_robot/` | Position/velocity protocol guides and command timing scripts |
 | `experiments/robot_to_robot/` | Quadrotor coordination workflow and tracking plot |
 | `scripts/`, `config/` | Launch wrappers and endpoint settings |
@@ -81,7 +80,7 @@ The paper separates host-to-gNB transfer (L1), gNB processing (L2), gNB-to-UE de
 python3 -m unittest discover -s tests -v
 ```
 
-Eight integration checks cover packet/port agreement, stale-state rejection, namespace failure handling, launcher arguments, local UDP capture, and plotting input behavior. They do not require a running radio or ROS simulator; optional plotting checks skip without their dependencies.
+Five integration checks cover stale-state rejection, namespace failure handling, launcher arguments, local UDP capture, and plotting input behavior. They do not require a running radio or ROS simulator.
 
 ## Paper and citation
 

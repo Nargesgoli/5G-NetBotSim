@@ -17,14 +17,14 @@ Preparation checks are distinct from observations reported by the authors from t
 
 ## Integration adaptations
 
-Teleoperation ports now agree; the commander uses one socket-owning thread. Host addresses and output paths are configurable. Namespace entry failures are checked. Drone receive/broadcast loops use their socket-owning threads. CSV output accepts filename-only paths and plotting rejects missing/empty logs. These organized sources are adaptations rather than a claim of byte-for-byte identity with every original experiment script.
+Host addresses and output paths are configurable. Namespace entry failures are checked. Drone receive/broadcast loops use their socket-owning threads. CSV output accepts filename-only paths and plotting rejects missing/empty logs. These organized sources are adaptations rather than a claim of byte-for-byte identity with every original experiment script.
 
 ## Remaining work
 
 - Match working startup/configuration and resolve UE-to-UE traffic.
 - Confirm final network branch, local patches, CQI profiles, and paper-to-radio-mode mapping.
 - Pin simulator dependencies and verify a clean installation.
-- Validate drone/ground operation, message loss, and shutdown behavior.
+- Validate quadrotor operation, message loss, and shutdown behavior.
 - Verify result provenance, metric definitions, DOI, and paper/video links.
 - Select the authors' original-code license while preserving dependency terms.
 

@@ -20,7 +20,7 @@ ip netns exec ue1 python3 experiments/human_to_robot/timing/ue1_receiver.py --na
 
 Run from the container project root. Use `--help` to inspect receiver options. CSV timestamp differences measure the instrumented application/bridge points, not physical-layer delay. Cross-host subtraction requires a separate synchronization design.
 
-No final-paper CSVs, historical result figures, or invented measurements are bundled. The ground plot's optional `--demo` output is explicitly synthetic and labeled accordingly; its mean spatial separation is not claimed as verified offset tracking error. The drone plot requires real populated logs. CQI labels and directory names do not select radio conditions.
+No final-paper CSVs, historical result figures, or invented measurements are bundled. The drone plot requires real populated logs. CQI labels and directory names do not select radio conditions.
 
 ## Paper latency stages (Section III-D)
 

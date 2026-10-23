@@ -6,7 +6,6 @@ import socket
 import subprocess
 import sys
 import tempfile
-import threading
 import time
 import types
 import unittest
@@ -26,42 +25,8 @@ def load_script(relative):
 
 
 class IntegrationTests(unittest.TestCase):
-    def test_teleoperation_route_agrees_at_both_ends(self):
-        for value in ['5012', '5500']:
-            with patch.dict(os.environ, {'NETBOTSIM_TELEOP_PORT': value}):
-                bridge = load_script('BotSim/examples/ground_teleoperation/ran_bridge.py')
-                receiver = load_script('BotSim/examples/ground_teleoperation/ue_receiver.py')
-            for cfg in receiver.UE_CONFIG:
-                self.assertEqual(bridge.UE_ROUTES[cfg['ns_name'].encode()],
-                                 (cfg['bind_ip'], cfg['udp_port']))
-
-    def test_commander_socket_has_one_thread_owner(self):
-        module = load_script('BotSim/examples/ground_teleoperation/commander.py')
-        owner = threading.get_ident()
-        sent = []
-
-        class Pub:
-            def bind(self, endpoint): pass
-            def send_multipart(self, frames):
-                self_owner = threading.get_ident()
-                if self_owner != owner:
-                    raise AssertionError('PUB socket used by another thread')
-                sent.append(frames)
-            def close(self): pass
-
-        pub = Pub()
-        ctx = types.SimpleNamespace(socket=lambda *_: pub, term=lambda: None)
-        module.zmq = types.SimpleNamespace(Context=lambda: ctx, PUB=1)
-        with patch.object(module.time, 'sleep', lambda _: None):
-            module.main()
-        self.assertEqual(len(sent), 2 * len(module.COMMAND_PAIRS))
-        self.assertEqual([f[0] for f in sent], [b'ue1', b'ue2'] * 4)
-
     def test_namespace_permission_failure_is_not_ignored(self):
-        for relative in ['BotSim/examples/ground_teleoperation/ue_receiver.py',
-                         'BotSim/examples/ground_velocity_replay/ue1_injector.py',
-                         'BotSim/examples/ground_velocity_replay/ue2_receiver.py',
-                         'BotSim/robot_to_robot/ue1_injector.py',
+        for relative in ['BotSim/robot_to_robot/ue1_injector.py',
                          'BotSim/robot_to_robot/ue2_receiver.py']:
             module = load_script(relative)
             with tempfile.TemporaryDirectory() as directory:
@@ -190,24 +155,6 @@ class IntegrationTests(unittest.TestCase):
                 finally:
                     proc.terminate()
                     proc.communicate(timeout=5)
-
-    def test_plot_requires_logs_and_marks_explicit_demo(self):
-        if not all(importlib.util.find_spec(m) for m in ['numpy', 'pandas', 'matplotlib', 'scipy']):
-            self.skipTest('plot dependencies unavailable')
-        with tempfile.TemporaryDirectory() as directory:
-            environment = dict(os.environ, MPLBACKEND='Agg')
-            base = [sys.executable, str(ROOT / 'BotSim/examples/ground_velocity_replay/plot_separation.py')]
-            missing = subprocess.run(base + ['--save'], cwd=directory,
-                env=environment, capture_output=True, text=True)
-            self.assertNotEqual(missing.returncode, 0)
-            self.assertIn('Missing experiment log', missing.stderr)
-            self.assertFalse((Path(directory) / 'platooning_trajectories.png').exists())
-            demo = subprocess.run(base + ['--demo', '--save'], cwd=directory,
-                env=environment, capture_output=True, text=True)
-            self.assertEqual(demo.returncode, 0, demo.stderr)
-            self.assertTrue((Path(directory) / 'synthetic_demo.png').exists())
-            self.assertFalse((Path(directory) / 'platooning_trajectories.png').exists())
-
 
 if __name__ == '__main__':
     unittest.main()

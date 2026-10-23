@@ -3,11 +3,10 @@ set -euo pipefail
 project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 action="${1:---help}"
 if [[ "$action" == --help || "$action" == help ]]; then
-  printf '%s\n' 'Usage: scripts/ros-workspace {build-ground|build-quadrotor|ground|ground-follow|quadrotor}'
+  printf '%s\n' 'Usage: scripts/ros-workspace {build-quadrotor|quadrotor}'
   exit 0
 fi
 case "$action" in
- build-ground|ground|ground-follow) workspace="$project_root/BotSim/workspaces/ground_ws" ;;
  build-quadrotor|quadrotor) workspace="$project_root/BotSim/workspaces/quadrotor_ws" ;;
  *) printf 'Unknown ROS action: %s\n' "$action" >&2; exit 2 ;;
 esac
@@ -29,7 +28,5 @@ set +u
 source "$workspace/devel/setup.bash"
 set -u
 case "$action" in
- ground) exec roslaunch multi_robot_sim start_multi_robot_sim.launch "$@" ;;
- ground-follow) exec roslaunch multi_robot_sim leader_follower.launch "$@" ;;
  quadrotor) exec roslaunch simple_multi_sim start_multi_robot_sim.launch "$@" ;;
 esac

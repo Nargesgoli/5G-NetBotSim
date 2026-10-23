@@ -5,7 +5,7 @@ This map follows the supplied accepted manuscript, **5G-NetBotSim: A Synchronize
 | Paper item | Repository location | Current coverage |
 |---|---|---|
 | Section III-A: 5G-NetSim | `5G-NetSim/`, `scripts/run-network` | Radio broker, source integration, launch guide; external baseline radio mode documented |
-| Section III-B: BotSim | `BotSim/` | ROS applications, custom ground/quadrotor packages; complete arm simulation external |
+| Section III-B: BotSim | `BotSim/` | ROS applications, custom quadrotor packages; complete arm simulation external |
 | Section III-C: EdgeSim | `EdgeSim/` | RAN-side controller, messaging, and scheduling integration guide |
 | Section III-D: timing | `experiments/human_to_robot/timing/`, `docs/MEASUREMENTS.md` | Packet stages L1–L3 available; complete L4–L5 arm event logging pending |
 | IV-C1, V-B1, Figs. 3a/6/7: human-to-robot | `experiments/human_to_robot/`, `BotSim/human_to_robot/` | Position timing code; position/velocity protocols; full MoveIt workflows pending |
