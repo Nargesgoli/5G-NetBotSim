@@ -6,7 +6,6 @@ Initial code and documentation release accompanying the 5G-NetBotSim paper by **
 
 This repository shares robot communication bridges, controllers, the two-UE radio broker, custom Gazebo launch packages, measurement utilities, and setup guidelines. Large third-party simulator trees, generated builds, recordings, and final experiment datasets are external to this compact release.
 
-> **Status:** Network compilation and both UE attachments were confirmed on the authors' Ubuntu host. Each UE reached the core gateway. UE-to-UE communication in the assembled release remains under investigation. Full robot/network operation and reproduction of the paper's figures are not yet validated for this release.
 
 ## Framework
 
