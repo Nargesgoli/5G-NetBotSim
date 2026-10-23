@@ -29,14 +29,14 @@ class IntegrationTests(unittest.TestCase):
     def test_teleoperation_route_agrees_at_both_ends(self):
         for value in ['5012', '5500']:
             with patch.dict(os.environ, {'NETBOTSIM_TELEOP_PORT': value}):
-                bridge = load_script('BotSim/teleoperation/ran_bridge.py')
-                receiver = load_script('BotSim/teleoperation/ue_receiver.py')
+                bridge = load_script('BotSim/examples/ground_teleoperation/ran_bridge.py')
+                receiver = load_script('BotSim/examples/ground_teleoperation/ue_receiver.py')
             for cfg in receiver.UE_CONFIG:
                 self.assertEqual(bridge.UE_ROUTES[cfg['ns_name'].encode()],
                                  (cfg['bind_ip'], cfg['udp_port']))
 
     def test_commander_socket_has_one_thread_owner(self):
-        module = load_script('BotSim/teleoperation/commander.py')
+        module = load_script('BotSim/examples/ground_teleoperation/commander.py')
         owner = threading.get_ident()
         sent = []
 
@@ -58,11 +58,11 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual([f[0] for f in sent], [b'ue1', b'ue2'] * 4)
 
     def test_namespace_permission_failure_is_not_ignored(self):
-        for relative in ['BotSim/teleoperation/ue_receiver.py',
-                         'BotSim/leader_follower/ue1_injector.py',
-                         'BotSim/leader_follower/ue2_receiver.py',
-                         'BotSim/drone_network/ue1_injector.py',
-                         'BotSim/drone_network/ue2_receiver.py']:
+        for relative in ['BotSim/examples/ground_teleoperation/ue_receiver.py',
+                         'BotSim/examples/ground_velocity_replay/ue1_injector.py',
+                         'BotSim/examples/ground_velocity_replay/ue2_receiver.py',
+                         'BotSim/robot_to_robot/ue1_injector.py',
+                         'BotSim/robot_to_robot/ue2_receiver.py']:
             module = load_script(relative)
             with tempfile.TemporaryDirectory() as directory:
                 original = Path(directory) / 'original'
@@ -82,7 +82,7 @@ class IntegrationTests(unittest.TestCase):
         from unittest.mock import Mock
         stamp = 2_000_000_000
         state = b'1.0,2.0,3.0,0.5'
-        injector = load_script('BotSim/drone_network/ue1_injector.py')
+        injector = load_script('BotSim/robot_to_robot/ue1_injector.py')
         sub, udp = Mock(), Mock()
         sub.recv_multipart.side_effect = [
             [b'leader', b'1,2000000000', state],
@@ -99,7 +99,7 @@ class IntegrationTests(unittest.TestCase):
             injector.main()
         datagram = b'1,2000000000|' + state
         udp.sendto.assert_called_once_with(datagram, ('172.16.0.3', 6000))
-        receiver = load_script('BotSim/drone_network/ue2_receiver.py')
+        receiver = load_script('BotSim/robot_to_robot/ue2_receiver.py')
         pub, incoming = Mock(), Mock()
         incoming.recvfrom.side_effect = [(datagram, ('172.16.0.2', 1)),
             (b'2,0|' + state, ('172.16.0.2', 1)), KeyboardInterrupt]
@@ -116,7 +116,7 @@ class IntegrationTests(unittest.TestCase):
         pub.send_string.assert_called_once_with(state.decode())
 
     def test_drone_plot_rejects_header_only_results(self):
-        module = load_script('experiments/plot_drone_network.py')
+        module = load_script('experiments/robot_to_robot/plot_tracking_error.py')
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'follower.csv'
             path.write_text('t_sec,fx,fy,fz,lx,ly,lz,error\n')
@@ -162,7 +162,7 @@ class IntegrationTests(unittest.TestCase):
                     probe.bind(('127.0.0.1', 0))
                     port = probe.getsockname()[1]
                 proc = subprocess.Popen([sys.executable,
-                    str(ROOT / f'experiments/latency/{name}_receiver.py'),
+                    str(ROOT / f'experiments/human_to_robot/timing/{name}_receiver.py'),
                     '--name', name.upper(), '--port', str(port), '--out', 'capture.csv'],
                     cwd=directory, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 try:
@@ -196,7 +196,7 @@ class IntegrationTests(unittest.TestCase):
             self.skipTest('plot dependencies unavailable')
         with tempfile.TemporaryDirectory() as directory:
             environment = dict(os.environ, MPLBACKEND='Agg')
-            base = [sys.executable, str(ROOT / 'experiments/plot_platooning.py')]
+            base = [sys.executable, str(ROOT / 'BotSim/examples/ground_velocity_replay/plot_separation.py')]
             missing = subprocess.run(base + ['--save'], cwd=directory,
                 env=environment, capture_output=True, text=True)
             self.assertNotEqual(missing.returncode, 0)

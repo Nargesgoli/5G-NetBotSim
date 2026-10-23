@@ -12,12 +12,24 @@ Follower CSV columns are `t_sec,fx,fy,fz,lx,ly,lz,error`. Its logged error is th
 
 ## Timing utilities
 
-`experiments/latency/` contains a host sender, a network-side bridge, and UE receivers. The bridge adds timestamps and forwards UDP. Its default route is UE1 port 5011; receivers default to 5005, so select the matching port explicitly:
+`experiments/human_to_robot/timing/` contains a host sender, a network-side bridge, and UE receivers. The bridge adds timestamps and forwards UDP. Its default route is UE1 port 5011; receivers default to 5005, so select the matching port explicitly:
 
 ```bash
-ip netns exec ue1 python3 experiments/latency/ue1_receiver.py --name UE1 --port 5011 --out results/ue1_latency.csv
+ip netns exec ue1 python3 experiments/human_to_robot/timing/ue1_receiver.py --name UE1 --port 5011 --out results/ue1_latency.csv
 ```
 
 Run from the container project root. Use `--help` to inspect receiver options. CSV timestamp differences measure the instrumented application/bridge points, not physical-layer delay. Cross-host subtraction requires a separate synchronization design.
 
 No final-paper CSVs, historical result figures, or invented measurements are bundled. The ground plot's optional `--demo` output is explicitly synthetic and labeled accordingly; its mean spatial separation is not claimed as verified offset tracking error. The drone plot requires real populated logs. CQI labels and directory names do not select radio conditions.
+
+## Paper latency stages (Section III-D)
+
+| Stage | Timestamp difference | Meaning |
+|---|---|---|
+| L1 | gNB receive minus host transmit | Host-to-gNB transfer |
+| L2 | gNB transmit minus gNB receive | gNB-side bridge processing |
+| L3 | UE receive minus gNB transmit | gNB-to-UE delivery |
+| L4 | robot execution start minus UE receive | UE-to-ROS handoff and dispatch |
+| L5 | robot execution completion minus execution start | Robot execution |
+
+The paper defines delivery as L1 + L2 + L3 and, when completion events are available, response as L1 through L5. Continuous velocity control is evaluated by trajectory deviation rather than a discrete completion event. The shipped human-to-robot timing scripts cover L1–L3; full arm execution instrumentation is not bundled.

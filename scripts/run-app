@@ -4,35 +4,36 @@ project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 role="${1:---help}"
 if [[ "$role" == --help || "$role" == help ]]; then
   printf '%s\n' 'Usage: scripts/run-app ROLE [arguments]' \
-    'Host: commander ros-bridge leader follower plot latency-sender' \
+    'Human-to-robot timing: latency-sender latency-bridge latency-ue1 latency-ue2' \
+    'Supplementary ground examples: commander ros-bridge leader follower plot' \
     'Drone host: drone-leader-state drone-follower drone-flight drone-plot' \
     'Drone container: drone-ue1-injector drone-ue2-receiver' \
     'Container: ran-bridge ue-receiver ue1-injector ue2-receiver latency-bridge' \
     'UE namespace: latency-ue1 latency-ue2 (run with ip netns exec)' \
-    'See docs/DRONE_EXPERIMENT.md and docs/GROUND_EXPERIMENT.md for prerequisites and startup order.'
+    'See docs/HUMAN_TO_ROBOT.md, docs/ROBOT_TO_ROBOT.md and docs/SUPPLEMENTARY_EXAMPLES.md for prerequisites and startup order.'
   exit 0
 fi
 shift
 case "$role" in
- drone-leader-state) file=BotSim/drone_network/leader_state.py ;;
- drone-follower) file=BotSim/drone_network/follower_control.py ;;
- drone-ue1-injector) file=BotSim/drone_network/ue1_injector.py ;;
- drone-ue2-receiver) file=BotSim/drone_network/ue2_receiver.py ;;
+ drone-leader-state) file=BotSim/robot_to_robot/leader_state.py ;;
+ drone-follower) file=BotSim/robot_to_robot/follower_control.py ;;
+ drone-ue1-injector) file=BotSim/robot_to_robot/ue1_injector.py ;;
+ drone-ue2-receiver) file=BotSim/robot_to_robot/ue2_receiver.py ;;
  drone-flight) file=BotSim/workspaces/quadrotor_ws/src/simple_multi_sim/scripts/leader_driver.py ;;
- drone-plot) file=experiments/plot_drone_network.py ;;
- commander) file=BotSim/teleoperation/commander.py ;;
- ran-bridge) file=BotSim/teleoperation/ran_bridge.py ;;
- ue-receiver) file=BotSim/teleoperation/ue_receiver.py ;;
- ros-bridge) file=BotSim/teleoperation/ros_bridge.py ;;
- leader) file=BotSim/leader_follower/leader.py ;;
- follower) file=BotSim/leader_follower/follower.py ;;
- ue1-injector) file=BotSim/leader_follower/ue1_injector.py ;;
- ue2-receiver) file=BotSim/leader_follower/ue2_receiver.py ;;
- plot) file=experiments/plot_platooning.py ;;
- latency-sender) file=experiments/latency/command_sender.py ;;
- latency-bridge) file=experiments/latency/ran_bridge.py ;;
- latency-ue1) file=experiments/latency/ue1_receiver.py ;;
- latency-ue2) file=experiments/latency/ue2_receiver.py ;;
+ drone-plot) file=experiments/robot_to_robot/plot_tracking_error.py ;;
+ commander) file=BotSim/examples/ground_teleoperation/commander.py ;;
+ ran-bridge) file=BotSim/examples/ground_teleoperation/ran_bridge.py ;;
+ ue-receiver) file=BotSim/examples/ground_teleoperation/ue_receiver.py ;;
+ ros-bridge) file=BotSim/examples/ground_teleoperation/ros_bridge.py ;;
+ leader) file=BotSim/examples/ground_velocity_replay/leader.py ;;
+ follower) file=BotSim/examples/ground_velocity_replay/follower.py ;;
+ ue1-injector) file=BotSim/examples/ground_velocity_replay/ue1_injector.py ;;
+ ue2-receiver) file=BotSim/examples/ground_velocity_replay/ue2_receiver.py ;;
+ plot) file=BotSim/examples/ground_velocity_replay/plot_separation.py ;;
+ latency-sender) file=experiments/human_to_robot/timing/command_sender.py ;;
+ latency-bridge) file=experiments/human_to_robot/timing/ran_bridge.py ;;
+ latency-ue1) file=experiments/human_to_robot/timing/ue1_receiver.py ;;
+ latency-ue2) file=experiments/human_to_robot/timing/ue2_receiver.py ;;
  *) printf 'Unknown application role: %s\n' "$role" >&2; exit 2 ;;
 esac
 # All generated logs stay outside the source folders.

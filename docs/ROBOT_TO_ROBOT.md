@@ -1,4 +1,4 @@
-# Drone leader–follower example
+# Robot-to-robot leader–follower coordination
 
 Requires a working quadrotor simulator and UE-to-UE connectivity. This workflow is not yet validated end to end in this release.
 
@@ -48,3 +48,5 @@ After a populated follower CSV exists:
 ```
 
 This plots offset error to the **received**, possibly delayed leader state. It is not automatically synchronized true-leader tracking error. Header-only logs are rejected. Final datasets and historical figures are not bundled. See [measurement definitions](MEASUREMENTS.md).
+
+Application sources are in [BotSim/robot_to_robot](../BotSim/robot_to_robot/). See [experiment overview](../experiments/robot_to_robot/) for the paper protocol and [EdgeSim](../EdgeSim/) for the separate bypass comparison.

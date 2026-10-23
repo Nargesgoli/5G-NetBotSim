@@ -1,72 +1,89 @@
 # 5G-NetBotSim
 
-**ROS robot applications connected through software-defined cellular co-simulation.**
+**A Synchronized Intelligent Co-Simulation Framework for Connected Robots over ROS and srsRAN-based 5G Network**
 
-Initial code and documentation release accompanying the 5G-NetBotSim paper by **Narges Golmohammadi, Bhaskara Venkata Raju Garuda, Ayan Joshi, and Sabur Baidya**.
+Code and documentation accompanying the paper by **Narges Golmohammadi, Bhaskara Venkata Raju Garuda, Ayan Joshi, and Sabur Baidya** (MSWiM/MobiWac 2026).
 
-This repository shares robot communication bridges, controllers, the two-UE radio broker, custom Gazebo launch packages, measurement utilities, and setup guidelines. Large third-party simulator trees, generated builds, recordings, and final experiment datasets are external to this compact release.
+5G-NetBotSim couples ROS/Gazebo robotic workloads with an executable cellular communication path and RAN-side edge support. The repository follows the paper's three-component architecture and two experimental workloads.
 
+## Architecture
 
-## Framework
+![5G-NetBotSim architecture from the paper](docs/assets/5g-netbotsim.jpg)
 
-| Component | Role | Included here |
+*Architecture figure supplied by the authors and used in the paper. The original image is included without modification.*
+
+| Component | Role in the paper | Repository |
 |---|---|---|
-| Network simulation | Software radio, core network, and UE namespaces | GNU Radio broker and launch wrappers; network dependency fetched separately |
-| RAN control | Scheduling and network-side messaging | Provided by the external upstream stack |
-| Robot simulation | ROS/Gazebo robots and application control | Ground/drone bridges and custom simulation packages |
+| **5G-NetSim** | Executable srsRAN communication path, virtual radio, core and UE processes, and per-UE network isolation | [5G-NetSim/](5G-NetSim/): radio broker, network setup, and external-source integration |
+| **EdgeSim** | RAN-side edge intelligence, scheduling, and the edge-assisted partial MAC-layer bypass for D2D communication | [EdgeSim/](EdgeSim/): component guide, upstream integration map, and bypass scope |
+| **BotSim** | ROS Noetic/Gazebo robot execution, control, visualization, and per-robot ROS namespaces | [BotSim/](BotSim/): robot applications and custom simulation packages |
 
-For the drone example, the host broadcasts leader position and yaw at 10 Hz. UE1 injects the state into the cellular path; UE2 forwards it to a follower controller. The follower target is 2 m behind the received leader position along the world X axis.
+Large third-party simulator trees, generated builds, recordings, and final experiment datasets are external to this compact source release. The paper describes the full framework; availability of each component's implementation is stated in its guide. See [release status](docs/RELEASE_STATUS.md) for the assembled release's validation and radio-mode details.
 
-```mermaid
-flowchart TD
-    L["Leader ROS odometry"] -->|"ZeroMQ 9993"| U1["UE1: UDP injector"]
-    U1 --> N["Cellular uplink, core, and downlink"]
-    N --> U2["UE2: UDP receiver"]
-    U2 -->|"ZeroMQ 9994"| F["Follower ROS controller"]
-```
+## Experiments
 
-The project name follows the paper. The current dependency snapshot starts an **LTE eNodeB/EPC**. Validated 5G NR operation and the final paper-to-implementation mapping remain to be confirmed for this release.
+### 1. Human-to-robot teleoperation
 
-## Guides
+The paper's human-to-robot workload controls a **multi-joint robotic arm** through two command modes:
 
-- [Installation and external dependencies](docs/INSTALLATION.md)
-- [Network startup and connectivity checks](docs/NETWORK_SETUP.md)
-- [Drone leader–follower workflow](docs/DRONE_EXPERIMENT.md)
-- [Ground robot examples](docs/GROUND_EXPERIMENT.md)
-- [Packet formats and measurements](docs/MEASUREMENTS.md)
-- [Validation status and limitations](docs/RELEASE_STATUS.md)
+- **Position/waypoint commands:** six predefined targets, with command delivery, ROS dispatch, queueing, and task-response timing.
+- **Velocity-parameterized commands:** motion labels and requested velocities, with interruption/replanning at command intervals of 0.5, 1.0, and 1.5 s.
 
-You can read and present this repository without installing the simulators. Running an experiment requires the dependencies and connectivity checks in the guides.
+[Human-to-robot experiments](experiments/human_to_robot/) include the supplied command/timing path and separate guides for the two modes. Full MoveIt execution nodes and velocity-mode experiment scripts are not yet included in this compact release. Ground mobile-robot teleoperation is kept as a supplementary example, rather than presented as the paper's arm experiment.
 
-## Source layout
+### 2. Robot-to-robot leader–follower coordination
 
-| Folder | Contents |
+The paper's robot-to-robot workload uses **two quadrotors**, `robot_alpha` and `robot_beta`. The leader takes off to 2 m and follows nine waypoints. Its position/yaw are transmitted at 10 Hz from UE1 to UE2; the follower uses bounded proportional control to maintain a 2 m world-X offset from the received leader state.
+
+[Robot-to-robot experiments](experiments/robot_to_robot/) connect the supplied drone controllers, cellular bridges, launch package, and tracking plot. The normal communication path and the paper's EdgeSim-assisted bypass comparison are documented separately; a validated bypass implementation is not bundled here.
+
+## Experiment videos
+
+Experiment recordings will be uploaded separately by the authors. See [video upload instructions](docs/VIDEO_UPLOAD.md).
+
+## Getting started
+
+1. Read [installation and external dependencies](docs/INSTALLATION.md).
+2. Review [5G-NetSim](5G-NetSim/), [EdgeSim](EdgeSim/), and [BotSim](BotSim/).
+3. Follow [network startup and connectivity checks](docs/NETWORK_SETUP.md).
+4. Select [human-to-robot](docs/HUMAN_TO_ROBOT.md) or [robot-to-robot](docs/ROBOT_TO_ROBOT.md).
+5. Use the paper's [measurement definitions](docs/MEASUREMENTS.md) and record the actual trial configuration.
+
+The guides distinguish commands available in this source subset from missing experiment assets. Reading/presenting the repository does not require installing the simulators.
+
+## Repository layout
+
+| Path | Purpose |
 |---|---|
-| `5G-NetSim/` | Supplied two-UE GNU Radio broker |
-| `BotSim/drone_network/` | Leader telemetry, UE bridges, follower control |
-| `BotSim/teleoperation/` | Ground robot commands and ROS bridges |
-| `BotSim/leader_follower/` | Separate ground velocity-replay example |
-| `BotSim/workspaces/` | Custom ground and quadrotor ROS packages only |
-| `experiments/` | Latency collectors and plotting tools |
-| `scripts/` | Application, ROS, and network wrappers |
-| `config/` | Example host/container endpoint settings |
-| `tests/` | Checks that require no running radio or ROS simulator |
-| `docs/` | Setup, metrics, limitations, and original startup references |
+| `5G-NetSim/` | Virtual-radio broker and network component guide |
+| `EdgeSim/` | Edge intelligence and partial MAC-bypass integration guide |
+| `BotSim/human_to_robot/` | Robotic-arm application integration and availability map |
+| `BotSim/robot_to_robot/` | Quadrotor telemetry, UE adapters, and follower control |
+| `BotSim/workspaces/` | Custom ROS/Gazebo packages; third-party simulator dependencies external |
+| `BotSim/examples/` | Supplementary ground teleoperation and velocity-replay examples |
+| `experiments/human_to_robot/` | Position/velocity protocol guides and command timing scripts |
+| `experiments/robot_to_robot/` | Quadrotor coordination workflow and tracking plot |
+| `scripts/`, `config/` | Launch wrappers and endpoint settings |
+| `docs/`, `tests/` | Setup, paper-to-code map, measurement definitions, and integration checks |
 
-## Local checks
+## Measurements
+
+The paper separates host-to-gNB transfer (L1), gNB processing (L2), gNB-to-UE delivery (L3), UE-to-ROS dispatch (L4), and robot execution (L5). Delivery latency is L1 + L2 + L3; task response includes L4 and L5 when execution events are available. The compact timing utilities currently cover L1–L3. See [measurements](docs/MEASUREMENTS.md) for the distinction between the paper's tracking error and the supplied follower's received-reference log.
+
+## Checks
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-Eight integration checks passed during preparation. They cover routing/port agreement, stale-packet rejection, namespace permission handling, launcher arguments, local UDP-to-CSV capture, and plotting inputs. Optional plot checks skip when their dependencies are absent. These are not live radio or Gazebo tests.
+Eight integration checks cover packet/port agreement, stale-state rejection, namespace failure handling, launcher arguments, local UDP capture, and plotting input behavior. They do not require a running radio or ROS simulator; optional plotting checks skip without their dependencies.
 
 ## Paper and citation
 
-**5G-NetBotSim: A Synchronized Intelligent Co-Simulation Framework for Connected Robots over ROS and srsRAN-based 5G Network** — Narges Golmohammadi, Bhaskara Venkata Raju Garuda, Ayan Joshi, and Sabur Baidya; MSWiM/MobiWac 2026.
+**5G-NetBotSim: A Synchronized Intelligent Co-Simulation Framework for Connected Robots over ROS and srsRAN-based 5G Network.**
 
-Final proceedings metadata, DOI, and paper/video links will be added after verification. `CITATION.cff` currently identifies the software repository rather than a final proceedings citation.
+Final proceedings metadata, DOI, and paper/video links will be added after verification. `CITATION.cff` identifies this software repository. [Paper-to-code map](docs/PAPER_TO_CODE.md) lists the corresponding components, workloads, and release coverage.
 
 ## Attribution and licensing
 
-The external network dependency is based on [EdgeRIC](https://github.com/ucsdwcsng/EdgeRIC-A-real-time-RIC). Quadrotor simulation uses Hector Quadrotor. Original source credits are retained. See [THIRD_PARTY.md](THIRD_PARTY.md) and [LICENSE.md](LICENSE.md). Project-facing naming does not change upstream authorship.
+The network dependency builds on [EdgeRIC](https://github.com/ucsdwcsng/EdgeRIC-A-real-time-RIC); quadrotor simulation uses Hector Quadrotor. See [THIRD_PARTY.md](THIRD_PARTY.md) and [LICENSE.md](LICENSE.md) for retained credits and licensing status.
