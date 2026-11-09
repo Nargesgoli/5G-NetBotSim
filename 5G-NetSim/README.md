@@ -4,6 +4,30 @@
 
 5G-NetSim is the framework's communication backbone: srsRAN base-station/UE processes, the core path, virtual-radio interfaces, per-UE network namespaces, and channel-quality configuration. The paper evaluates network effects through CQI, MCS, throughput, and packet timing.
 
+## Paper
+
+This component is part of **5G-NetBotSim: A Synchronized Co-Simulation Framework for Connected Robots over ROS and srsRAN-based 5G Network**.
+
+Narges Golmohammadi, Bhaskara Venkata Raju Garuda, Ayan Joshi, and Sabur Baidya.
+
+[arXiv](https://arxiv.org/abs/2611.09735) | [PDF](https://arxiv.org/pdf/2611.09735)
+
+## Citation
+
+If you use this framework in your research, please cite:
+
+```bibtex
+@misc{golmohammadi20265gnetbotsimsynchronizedcosimulationframework,
+  title={{5G-NetBotSim}: A Synchronized Co-Simulation Framework for Connected Robots over {ROS} and {srsRAN}-based {5G} Network},
+  author={Narges Golmohammadi and Bhaskara Venkata Raju Garuda and Ayan Joshi and Sabur Baidya},
+  year={2026},
+  eprint={2611.09735},
+  archivePrefix={arXiv},
+  primaryClass={cs.NI},
+  url={https://arxiv.org/abs/2611.09735}
+}
+```
+
 ## Included integration
 
 - `radio_broker.py`: the supplied two-UE GNU Radio flowgraph.
